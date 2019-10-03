@@ -20,6 +20,8 @@ English | [简体中文](./README.zh-CN.md)
 
 ## Installation
 
+We think you've already installed the [Commitizen](https://github.com/commitizen/cz-cli).
+
 ### Globally
 
 ```

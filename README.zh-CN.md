@@ -1,6 +1,6 @@
 # cz-conventional-emoji
 
-一个遵循conventional-changelog的带有emoji的commitizen适配器。
+一个遵循 conventional-changelog 的带有 emoji 的 commitizen 适配器。
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
@@ -20,16 +20,19 @@
 
 ## 安装
 
+我们默认你已经安装过 [Commitizen](https://github.com/commitizen/cz-cli)。
+
 ### 全局
 
 ```
-yarn global add cz-conventional-emoji
+yarn global add commitizen cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
 
 # 设置全局默认适配器
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 ```
+
 ### 本地
 
 ```
