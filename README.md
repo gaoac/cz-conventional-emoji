@@ -4,6 +4,8 @@ A commitizen adapter following the conventional-changelog format with emoji.
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+[![NPM](https://nodei.co/npm/cz-conventional-emoji.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/cz-conventional-emoji/)
+
 English | [简体中文](./README.zh-CN.md)
 
 ```
