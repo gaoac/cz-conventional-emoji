@@ -8,7 +8,7 @@ English | [简体中文](./README.zh-CN.md)
 
 ```
  Select the type of change that you're committing: (Use arrow keys)
-❯ ✨  Feat:               Introducing new features.
+❯ ✨  Feat:              Introducing new features.
   🐛  Bug:               Fixing a bug.
   📝  Docs:              Writing docs.
   🎨  Style:             Improving structure / format of the code.
