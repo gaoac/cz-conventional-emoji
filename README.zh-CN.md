@@ -25,7 +25,7 @@
 ### 全局
 
 ```
-yarn global add commitizen cz-conventional-emoji
+yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
 
