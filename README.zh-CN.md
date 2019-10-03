@@ -54,7 +54,7 @@ yarn add cz-conventional-emoji
 
 ## 作者
 
-gaoancun <gaoancun@qq.com>
+gaoancun <gaoac.snow@outlook.com>
 
 ## 许可证
 

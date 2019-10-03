@@ -54,7 +54,7 @@ Simply use `git cz` instead of `git commit` when committing. See the doc of [Com
 
 ## Author
 
-gaoancun <gaoancun@qq.com>
+gaoancun <gaoac.snow@outlook.com>
 
 ## License
 
