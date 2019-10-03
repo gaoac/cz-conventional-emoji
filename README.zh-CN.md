@@ -1,10 +1,10 @@
 # cz-conventional-emoji
 
-A commitizen adapter following the conventional-changelog format with emoji.
+一个遵循conventional-changelog的带有emoji的commitizen适配器。
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-English | [简体中文](./README.zh-CN.md)
+[English](./README.md) | 简体中文
 
 ```
  Select the type of change that you're committing: (Use arrow keys)
@@ -18,42 +18,41 @@ English | [简体中文](./README.zh-CN.md)
 (Move up and down to reveal more choices)
 ```
 
-## Installation
+## 安装
 
-### Globally
+### 全局
 
 ```
 yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
 
-# set as default adapter globally
+# 设置全局默认适配器
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 ```
-
-### Locally
+### 本地
 
 ```
 yarn add cz-conventional-emoji
 # OR
 # npm install --save-dev cz-conventional-emoji
 
-# set as default adapter for your projects
+# 为你的项目设置默认适配器
 "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-emoji"
     },
-  },
+  }
 ```
 
-## Usage
+## 使用
 
-Simply use `git cz` instead of `git commit` when committing. See the doc of [Commitizen](https://github.com/commitizen/cz-cli) for more info.
+当需要提交时，只需使用“git cz”代替“git commit”即可。查看[Commitizen](https://github.com/commitizen/cz-cli)官方文档了解更多信息。
 
-## Author
+## 作者
 
 gaoancun <gaoancun@qq.com>
 
-## License
+## 许可证
 
 [MIT](LICENSE)
