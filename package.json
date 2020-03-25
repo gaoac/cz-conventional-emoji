@@ -1,6 +1,6 @@
 {
   "name": "cz-conventional-emoji",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A commitizen adapter following the conventional-changelog format with emoji.",
   "main": "index.js",
   "scripts": {
