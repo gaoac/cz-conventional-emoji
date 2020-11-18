@@ -32,7 +32,7 @@
   "devDependencies": {
     "cosmiconfig": "^5.2.1",
     "prettier": "^1.15.3",
-    "semantic-release": "^15.13.3",
+    "semantic-release": "^17.2.3",
     "semver": "^6.2.0"
   },
   "optionalDependencies": {
