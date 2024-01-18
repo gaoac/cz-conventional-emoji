@@ -18,6 +18,12 @@
       "description": "Writing docs.",
       "name": "pencil"
     },
+    "Chore": {
+      "emoji": "🔧",
+      "code": ":wrench:",
+      "description": "Other changes that don't modify src or test files.",
+      "name": "wrench"
+    },
     "Style": {
       "emoji": "🎨",
       "code": ":art:",
@@ -54,7 +60,6 @@
       "description": "Deploying stuff.",
       "name": "rocket"
     },
-
     "Init": {
       "emoji": "🎉",
       "code": ":tada:",
