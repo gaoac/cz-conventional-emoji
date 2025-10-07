@@ -3,7 +3,6 @@
 var wrap = require('word-wrap');
 var map = require('lodash.map');
 var longest = require('longest');
-var rightPad = require('right-pad');
 var chalk = require('chalk');
 
 var filter = function(array) {
@@ -14,7 +13,7 @@ var filter = function(array) {
 
 var headerLength = function(answers) {
   return (
-    answers.type.name.length + 2 + (answers.scope ? answers.scope.length + 2 : 0)
+    answers.type.length + 2 + (answers.scope ? answers.scope.length + 2 : 0)
   );
 };
 
@@ -22,9 +21,9 @@ var maxSummaryLength = function(options, answers) {
   return options.maxHeaderWidth - headerLength(answers);
 };
 
-var filterSubject = function(subject) {
+var filterSubject = function(subject, disableSubjectLowerCase) {
   subject = subject.trim();
-  if (subject.charAt(0).toLowerCase() !== subject.charAt(0)) {
+  if (!disableSubjectLowerCase && subject.charAt(0).toLowerCase() !== subject.charAt(0)) {
     subject =
       subject.charAt(0).toLowerCase() + subject.slice(1, subject.length);
   }
@@ -39,16 +38,153 @@ var filterSubject = function(subject) {
 // fine.
 module.exports = function(options) {
   var types = options.types;
+  var useGitmoji = options.useGitmoji;
+  var gitmojis = options.gitmojis;
 
-  var length = longest(Object.keys(types)).length + 1;
-  var choices = map(types, function(type, key) {
-    return {
-      name: rightPad(type.emoji + '  ' + key + ':', length) + ' ' + type.description,
-      value: {
-        emoji: type.emoji,
-        name: key,
-      }
+  // Use gitmoji types if enabled
+  if (useGitmoji) {
+    // Convert gitmojis array to conventional commit types format
+    types = {};
+    
+    // English type name mapping for better understanding
+    var typeNameMap = {
+      ':sparkles:': 'feat',
+      ':bug:': 'fix',
+      ':memo:': 'docs',
+      ':lipstick:': 'style',
+      ':recycle:': 'refactor',
+      ':white_check_mark:': 'test',
+      ':wrench:': 'chore',
+      ':zap:': 'perf',
+      ':construction_worker:': 'ci',
+      ':building_construction:': 'build',
+      ':rewind:': 'revert',
+      ':construction:': 'wip',
+      ':lock:': 'security',
+      ':rocket:': 'release',
+      ':boom:': 'breaking',
+      ':ambulance:': 'hotfix',
+      ':fire:': 'remove',
+      ':tada:': 'init',
+      ':closed_lock_with_key:': 'secrets',
+      ':bookmark:': 'version',
+      ':rotating_light:': 'warn',
+      ':green_heart:': 'ci-fix',
+      ':arrow_down:': 'downgrade',
+      ':arrow_up:': 'upgrade',
+      ':pushpin:': 'pin',
+      ':chart_with_upwards_trend:': 'analytics',
+      ':heavy_plus_sign:': 'deps-add',
+      ':heavy_minus_sign:': 'deps-remove',
+      ':globe_with_meridians:': 'i18n',
+      ':pencil2:': 'chore',
+      ':poop:': 'bad-code',
+      ':twisted_rightwards_arrows:': 'merge',
+      ':package:': 'package',
+      ':alien:': 'external-api',
+      ':truck:': 'move',
+      ':page_facing_up:': 'license',
+      ':bento:': 'assets',
+      ':wheelchair:': 'accessibility',
+      ':bulb:': 'comments',
+      ':beers:': 'drunk-code',
+      ':speech_balloon:': 'text',
+      ':card_file_box:': 'database',
+      ':loud_sound:': 'logs',
+      ':mute:': 'remove-logs',
+      ':busts_in_silhouette:': 'contributors',
+      ':children_crossing:': 'ux',
+      ':iphone:': 'responsive',
+      ':clown_face:': 'mock',
+      ':egg:': 'easter-egg',
+      ':see_no_evil:': 'gitignore',
+      ':camera_flash:': 'snapshots',
+      ':alembic:': 'experiment',
+      ':mag:': 'seo',
+      ':label:': 'types',
+      ':seedling:': 'seed',
+      ':triangular_flag_on_post:': 'feature-flags',
+      ':goal_net:': 'error-handling',
+      ':dizzy:': 'animation',
+      ':wastebasket:': 'deprecate',
+      ':passport_control:': 'auth',
+      ':adhesive_bandage:': 'quick-fix',
+      ':monocle_face:': 'data-analysis',
+      ':coffin:': 'dead-code',
+      ':test_tube:': 'failing-test',
+      ':necktie:': 'business-logic',
+      ':stethoscope:': 'health-check',
+      ':bricks:': 'infrastructure',
+      ':technologist:': 'dx',
+      ':money_with_wings:': 'sponsors',
+      ':thread:': 'concurrency',
+      ':safety_vest:': 'validation',
+      ':airplane:': 'offline'
     };
+    
+    // Define preferred order based on conventional-commit-types
+    var preferredOrder = [
+      ':sparkles:', // feat
+      ':bug:', // fix
+      ':memo:', // docs
+      ':lipstick:', // style
+      ':recycle:', // refactor
+      ':zap:', // perf
+      ':white_check_mark:', // test
+      ':building_construction:', // build
+      ':construction_worker:', // ci
+      ':pencil2:', // chore
+      ':rewind:' // revert
+    ];
+    
+    // First add preferred types in order
+    preferredOrder.forEach(function(code) {
+      var gitmoji = gitmojis.find(function(g) { return g.code === code; });
+      if (gitmoji) {
+        var typeName = typeNameMap[gitmoji.code] || gitmoji.name;
+        types[gitmoji.code] = {
+          description: gitmoji.description,
+          title: gitmoji.name,
+          emoji: gitmoji.emoji,
+          typeName: typeName
+        };
+      }
+    });
+    
+    // Then add remaining gitmojis
+    gitmojis.forEach(function(gitmoji) {
+      if (!types[gitmoji.code]) {
+        var typeName = typeNameMap[gitmoji.code] || gitmoji.name;
+        types[gitmoji.code] = {
+          description: gitmoji.description,
+          title: gitmoji.name,
+          emoji: gitmoji.emoji,
+          typeName: typeName
+        };
+      }
+    });
+  }
+
+  var choices = map(types, function(type, key) {
+    if (useGitmoji) {
+      // Format: emoji typeName: description (with proper alignment)
+      var typeName = type.typeName;
+      // Calculate length based on emoji + typeName for proper description alignment
+      var typeNames = Object.values(types).map(function(t) { return t.typeName; });
+      var maxTypeNameLength = longest(typeNames).length;
+      var currentTypeNameLength = typeName.length;
+      var padding = maxTypeNameLength - currentTypeNameLength;
+      return {
+        name: type.emoji + '  ' + typeName + ':' + ' '.repeat(padding) + ' ' + type.description,
+        value: key
+      };
+    } else {
+      var length = longest(Object.keys(types)).length + 1;
+      return {
+        name: (key + ':').padEnd(length) + ' ' + type.description,
+        value: key
+      };
+    }
   });
 
   return {
@@ -103,7 +239,7 @@ module.exports = function(options) {
           },
           default: options.defaultSubject,
           validate: function(subject, answers) {
-            var filteredSubject = filterSubject(subject);
+            var filteredSubject = filterSubject(subject, options.disableSubjectLowerCase);
             return filteredSubject.length == 0
               ? 'subject is required'
               : filteredSubject.length <= maxSummaryLength(options, answers)
@@ -115,7 +251,7 @@ module.exports = function(options) {
                 ' characters.';
           },
           transformer: function(subject, answers) {
-            var filteredSubject = filterSubject(subject);
+            var filteredSubject = filterSubject(subject, options.disableSubjectLowerCase);
             var color =
               filteredSubject.length <= maxSummaryLength(options, answers)
                 ? chalk.green
@@ -123,7 +259,7 @@ module.exports = function(options) {
             return color('(' + filteredSubject.length + ') ' + subject);
           },
           filter: function(subject) {
-            return filterSubject(subject);
+            return filterSubject(subject, options.disableSubjectLowerCase);
           }
         },
         {
@@ -204,7 +340,15 @@ module.exports = function(options) {
         var scope = answers.scope ? '(' + answers.scope + ')' : '';
 
         // Hard limit this line in the validate
-        var head = answers.type.emoji + ' '+ answers.type.name + scope + ': ' + answers.subject;
+        var head;
+        if (useGitmoji) {
+          // Format: typeName(scope): emoji subject (standard-version compatible format)
+          var selectedType = types[answers.type];
+          var typeName = selectedType.typeName;
+          head = typeName + scope + ': ' + selectedType.emoji + ' ' + answers.subject;
+        } else {
+          head = answers.type + scope + ': ' + answers.subject;
+        }
 
         // Wrap these lines at options.maxLineWidth characters
         var body = answers.body ? wrap(answers.body, wrapOptions) : false;
