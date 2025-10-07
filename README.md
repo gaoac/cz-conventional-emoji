@@ -25,15 +25,14 @@ English | [简体中文](./README.zh-CN.md)
 (Move up and down to reveal more choices)
 ```
 
-## About This Fork
+## About This Project
 
-This project is a fork of [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) with the following enhancements:
+This project is based on [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) with the following enhancements:
 
-- **Enhanced Gitmoji Support**: Improved gitmoji integration with better alignment and spacing
-- **Fixed Emoji Rendering**: Resolved Variation Selector-16 issues that caused terminal spacing problems
+- **Enhanced Gitmoji Support**: Improved gitmoji integration with better alignment, spacing, and terminal display
+- **Fixed Emoji Rendering**: Added proper spacing to resolve Variation Selector-16 terminal display issues
 - **Better Type Sorting**: Reordered commit types to match conventional-commit-types standards
-- **Improved Alignment**: Fixed description text alignment for better visual consistency
-- **Gitmoji Enabled by Default**: Use emoji commits out of the box after installation, no additional configuration needed
+- **Extended Gitmoji Types**: Support for 100+ gitmoji types with comprehensive coverage
 - **standard-version Compatible**: Commit message format adjusted to `type(scope): emoji subject` to ensure full compatibility with standard-version
 
 All original features are preserved while adding these improvements for a better user experience.
@@ -131,7 +130,7 @@ CZ_USE_GITMOJI=false git cz
 | ✅ | `test` | Add, update, or pass tests |
 | 🏗️ | `build` | Add or update build system |
 | 👷 | `ci` | Add or update CI configuration |
-| ✏️ | `chore` | Fix typos |
+| ✏️ | `chore` | Fix typos or text corrections |
 | ⏪ | `revert` | Revert changes |
 
 ## Examples
@@ -383,7 +382,7 @@ gaoancun <gaoac.snow@outlook.com>
 ## Related Projects
 
 - [commitizen](https://github.com/commitizen/cz-cli) - commitizen CLI
+- [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) - Original conventional changelog adapter
 - [conventional-changelog](https://github.com/conventional-changelog/conventional-changelog) - Generate changelogs from git metadata
 - [conventional-commit-types](https://github.com/commitizen/conventional-commit-types) - List of conventional commit types
 - [gitmoji](https://gitmoji.dev/) - An emoji guide for your commit messages
-- [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) - Original conventional changelog adapter
