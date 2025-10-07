@@ -223,7 +223,7 @@ module.exports = {
     { "type": "perf", "section": "Performance Improvements", "bump": "patch" },
     
     // 扩展类型 - 次版本号（新功能）
-    { "type": "hotfix", "section": "Hotfixes", "bump": "patch" },
+    { "type": "hotfix", "section": "Hotfixes", "bump": "minor" },
     { "type": "init", "section": "Features", "bump": "minor" },
     { "type": "seed", "section": "Features", "bump": "minor" },
     { "type": "easter-egg", "section": "Features", "bump": "minor" },
@@ -301,8 +301,8 @@ module.exports = {
 ### 版本更新规则
 
 - **主版本号** (1.0.0 → 2.0.0): `breaking`（当使用 BREAKING CHANGE 页脚时）
-- **次版本号** (1.0.0 → 1.1.0): `feat`, `init`, `seed`, `easter-egg`, `feature-flags`, `animation`, `auth`, `business-logic`, `dx`, `sponsors`, `concurrency`, `validation`, `offline`
-- **修订版本号** (1.0.0 → 1.0.1): `fix`, `perf`, `hotfix`, `security`, `ci-fix`, `warn`, `quick-fix`, `error-handling`, `dead-code`, `failing-test`, `health-check`, `style`, `refactor`, `accessibility`, `ux`, `responsive`, `seo`, `types`, `text`, `database`, `experiment`, `deprecate`, `docs`, `test`, `build`, `ci`, `chore`, `revert`, `wip`, `release`, `remove`, `secrets`, `version`, `downgrade`, `upgrade`, `pin`, `analytics`, `deps-add`, `deps-remove`, `i18n`, `bad-code`, `merge`, `package`, `external-api`, `move`, `license`, `assets`, `comments`, `drunk-code`, `logs`, `remove-logs`, `contributors`, `mock`, `gitignore`, `snapshots`, `infrastructure`
+- **次版本号** (1.0.0 → 1.1.0): `feat`, `hotfix`, `init`, `seed`, `easter-egg`, `feature-flags`, `animation`, `auth`, `business-logic`, `dx`, `sponsors`, `concurrency`, `validation`, `offline`
+- **修订版本号** (1.0.0 → 1.0.1): `fix`, `perf`, `security`, `ci-fix`, `warn`, `quick-fix`, `error-handling`, `dead-code`, `failing-test`, `health-check`, `style`, `refactor`, `accessibility`, `ux`, `responsive`, `seo`, `types`, `text`, `database`, `experiment`, `deprecate`, `docs`, `test`, `build`, `ci`, `chore`, `revert`, `wip`, `release`, `remove`, `secrets`, `version`, `downgrade`, `upgrade`, `pin`, `analytics`, `deps-add`, `deps-remove`, `i18n`, `bad-code`, `merge`, `package`, `external-api`, `move`, `license`, `assets`, `comments`, `drunk-code`, `logs`, `remove-logs`, `contributors`, `mock`, `gitignore`, `snapshots`, `infrastructure`
 
 ### 使用方法
 
@@ -346,7 +346,7 @@ module.exports = {
         "releaseRules": [
           { "type": "feat", "release": "minor" },
           { "type": "fix", "release": "patch" },
-          { "type": "hotfix", "release": "patch" },
+          { "type": "hotfix", "release": "minor" },
           { "type": "perf", "release": "patch" },
           { "type": "breaking", "release": "major" }
         ]

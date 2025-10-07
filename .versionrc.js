@@ -6,7 +6,7 @@ module.exports = {
     { "type": "perf", "section": "Performance Improvements", "bump": "patch" },
     
     // Extended types - Minor version (new features)
-    { "type": "hotfix", "section": "Hotfixes", "bump": "patch" },
+    { "type": "hotfix", "section": "Hotfixes", "bump": "minor" },
     { "type": "init", "section": "Features", "bump": "minor" },
     { "type": "seed", "section": "Features", "bump": "minor" },
     { "type": "easter-egg", "section": "Features", "bump": "minor" },
