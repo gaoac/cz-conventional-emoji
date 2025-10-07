@@ -126,6 +126,7 @@ module.exports = function(options) {
     var preferredOrder = [
       ':sparkles:', // feat
       ':bug:', // fix
+      ':ambulance:', // hotfix
       ':memo:', // docs
       ':lipstick:', // style
       ':recycle:', // refactor
