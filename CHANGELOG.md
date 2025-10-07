@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.2...v1.1.3) (2025-10-07)
+
+
+### Bug Fixes
+
+* 🐛 change hotfix bump type from patch to minor ([db49cd0](https://github.com/gaoac/cz-conventional-emoji/commit/db49cd0a14083a1aabf1b6b02bfdbbaf2a521ada))
+
 ### [1.1.2](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.1...v1.1.2) (2025-10-07)
 
 
