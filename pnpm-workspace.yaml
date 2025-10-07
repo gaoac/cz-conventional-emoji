@@ -1,0 +1,4 @@
+overrides:
+  lodash.merge@<4.6.2: '>=4.6.2'
+  lodash.mergewith@<4.6.2: '>=4.6.2'
+  tmp@<=0.2.3: '>=0.2.4'

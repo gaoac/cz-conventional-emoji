@@ -66,6 +66,8 @@ We assume you have already installed [Commitizen](https://github.com/commitizen/
 yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
+# OR
+# pnpm add --global cz-conventional-emoji
 
 # Set global default adapter
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
@@ -77,6 +79,8 @@ echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 yarn add cz-conventional-emoji
 # OR
 # npm install --save-dev cz-conventional-emoji
+# OR
+# pnpm add cz-conventional-emoji
 
 # Set default adapter for your project
 "config": {

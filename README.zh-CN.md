@@ -66,6 +66,8 @@ type(scope): emoji subject
 yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
+# OR
+# pnpm add --global cz-conventional-emoji
 
 # 设置全局默认适配器
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
@@ -77,6 +79,8 @@ echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 yarn add cz-conventional-emoji
 # OR
 # npm install --save-dev cz-conventional-emoji
+# OR
+# pnpm add cz-conventional-emoji
 
 # 为你的项目设置默认适配器
 "config": {

@@ -1,7 +1,6 @@
 'format cjs';
 
 var wrap = require('word-wrap');
-var map = require('lodash.map');
 var longest = require('longest');
 var chalk = require('chalk');
 
@@ -166,7 +165,7 @@ module.exports = function(options) {
     });
   }
 
-  var choices = map(types, function(type, key) {
+  var choices = Object.entries(types).map(function([key, type]) {
     if (useGitmoji) {
       // Format: emoji typeName: description (with proper alignment)
       var typeName = type.typeName;
@@ -255,8 +254,8 @@ module.exports = function(options) {
             var filteredSubject = filterSubject(subject, options.disableSubjectLowerCase);
             var color =
               filteredSubject.length <= maxSummaryLength(options, answers)
-                ? chalk.green
-                : chalk.red;
+                ? chalk.default.green
+                : chalk.default.red;
             return color('(' + filteredSubject.length + ') ' + subject);
           },
           filter: function(subject) {
