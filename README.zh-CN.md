@@ -32,7 +32,7 @@
 - **增强的 Gitmoji 支持**：改进了 gitmoji 集成，具有更好的对齐、间距和终端显示效果
 - **修复表情符号渲染**：通过添加适当间距解决 Variation Selector-16 终端显示问题
 - **更好的类型排序**：重新排序提交类型以匹配 conventional-commit-types 标准
-- **扩展的 Gitmoji 类型**：支持 100+ 种 gitmoji 类型，提供全面的覆盖
+- **扩展的 Gitmoji 类型**：支持 70+ 种 gitmoji 类型，提供全面的覆盖
 - **standard-version 兼容**：commit 消息格式调整为 `type(scope): emoji subject` 以确保与 standard-version 完全兼容
 
 在保留所有原始功能的同时，添加了这些改进以获得更好的用户体验。

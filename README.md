@@ -32,7 +32,7 @@ This project is based on [cz-conventional-changelog](https://github.com/commitiz
 - **Enhanced Gitmoji Support**: Improved gitmoji integration with better alignment, spacing, and terminal display
 - **Fixed Emoji Rendering**: Added proper spacing to resolve Variation Selector-16 terminal display issues
 - **Better Type Sorting**: Reordered commit types to match conventional-commit-types standards
-- **Extended Gitmoji Types**: Support for 100+ gitmoji types with comprehensive coverage
+- **Extended Gitmoji Types**: Support for 70+ gitmoji types with comprehensive coverage
 - **standard-version Compatible**: Commit message format adjusted to `type(scope): emoji subject` to ensure full compatibility with standard-version
 
 All original features are preserved while adding these improvements for a better user experience.
