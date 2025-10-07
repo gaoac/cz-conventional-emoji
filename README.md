@@ -62,7 +62,7 @@ We assume you have already installed [Commitizen](https://github.com/commitizen/
 
 ### Global
 
-```
+```bash
 yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
@@ -75,7 +75,7 @@ echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 
 ### Local
 
-```
+```bash
 yarn add cz-conventional-emoji
 # OR
 # npm install --save-dev cz-conventional-emoji
@@ -104,7 +104,7 @@ echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 ```
 
 **Project Configuration**
-```json5
+```json
 {
   "config": {
     "commitizen": {

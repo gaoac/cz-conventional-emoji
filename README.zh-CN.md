@@ -62,7 +62,7 @@ type(scope): emoji subject
 
 ### 全局
 
-```
+```bash
 yarn global add cz-conventional-emoji
 # OR
 # npm install --global cz-conventional-emoji
@@ -75,7 +75,7 @@ echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 
 ### 本地
 
-```
+```bash
 yarn add cz-conventional-emoji
 # OR
 # npm install --save-dev cz-conventional-emoji
@@ -104,7 +104,7 @@ echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 ```
 
 **项目配置**
-```json5
+```json
 {
   "config": {
     "commitizen": {
