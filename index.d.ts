@@ -6,7 +6,6 @@
  */
 
 declare module 'cz-conventional-emoji' {
-  import { Adapter } from 'commitizen';
 
   /**
    * Configuration options for cz-conventional-emoji
@@ -259,6 +258,11 @@ declare global {
        * @default 'true'
        */
       CZ_USE_GITMOJI?: string;
+
+      /**
+       * Enable debug mode for additional logging
+       */
+      DEBUG?: string;
     }
   }
 }
