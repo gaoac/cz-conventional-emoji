@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.1.8](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.7...v1.1.8) (2025-10-08)
 
+### [1.1.8](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.7...v1.1.8) (2025-10-08)
+
 
 ### Bug Fixes
 
