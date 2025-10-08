@@ -6,7 +6,7 @@
 [![npm version](https://img.shields.io/npm/v/cz-conventional-emoji.svg)](https://www.npmjs.com/package/cz-conventional-emoji)
 [![npm downloads](https://img.shields.io/npm/dm/cz-conventional-emoji.svg)](https://www.npmjs.com/package/cz-conventional-emoji)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Test Coverage](https://img.shields.io/badge/coverage-81.5%25-brightgreen.svg)](./coverage)
+[![Test Coverage](https://img.shields.io/badge/coverage-95.8%25-brightgreen.svg)](./coverage)
 
 [![NPM](https://nodei.co/npm/cz-conventional-emoji.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/cz-conventional-emoji/)
 
@@ -35,7 +35,7 @@
 - 🔧 **灵活配置** - 支持全局、项目级或环境变量配置
 - 📦 **Standard-Version 兼容** - 与自动化版本管理工具无缝协作
 - 💪 **TypeScript 支持** - 包含完整的类型定义
-- ✅ **充分测试** - 108 个测试用例，81.5% 覆盖率
+- ✅ **充分测试** - 174 个测试用例，95.8% 核心引擎覆盖率
 - 🎯 **Commitizen 友好** - 完全兼容 commitizen 生态系统
 
 ## 🚀 快速开始

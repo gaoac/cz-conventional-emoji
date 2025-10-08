@@ -2,21 +2,33 @@ import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    // 测试环境
+    // Test environment
     environment: 'node',
-    // 测试文件匹配模式
-    include: ['**/*.test.js'],
-    // 全局变量配置
+    // Test file matching pattern
+    include: ['tests/**/*.test.js'],
+    // Global variables configuration
     globals: true,
-    // 覆盖率配置
+    // Coverage configuration
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       exclude: [
         'node_modules/**',
         'test/**',
+        'tests/**',
+        'index.js',
         '**/*.test.js',
-        '**/*.config.js'
+        '**/*.config.js',
+        '**/*.d.ts',
+        '**/.versionrc.js',
+        '**/README*.md',
+        '**/LICENSE',
+        '**/package.json',
+        '**/package-lock.json',
+        '**/yarn.lock',
+        '**/pnpm-lock.yaml',
+        '.history/**',
+        'coverage/**'
       ]
     }
   }

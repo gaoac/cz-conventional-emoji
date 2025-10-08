@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.7...v1.1.8) (2025-10-08)
+
+
+### Bug Fixes
+
+* 🐛 resolve TypeScript global declaration error ([517573d](https://github.com/gaoac/cz-conventional-emoji/commit/517573d81a7b883844db1ea89400360a1c026408))
+
+### [1.1.8](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.7...v1.1.8) (2025-10-08)
+
+
+### Bug Fixes
+
+* 🐛 resolve TypeScript global declaration error ([517573d](https://github.com/gaoac/cz-conventional-emoji/commit/517573d81a7b883844db1ea89400360a1c026408))
+
+
+### Performance Improvements
+
+* ⚡️ add comprehensive test suite with 95.8% coverage ([19b9a74](https://github.com/gaoac/cz-conventional-emoji/commit/19b9a74219897963c894cbd85a3a1f9b5e221876))
+
 ### [1.1.7](https://github.com/gaoac/cz-conventional-emoji/compare/v1.1.6...v1.1.7) (2025-10-08)
 
 
