@@ -29,6 +29,32 @@ English | [简体中文](./README.zh-CN.md)
 (Move up and down to reveal more choices)
 ```
 
+## ✨ Features
+
+- 🎨 **70+ Gitmoji Types** - Comprehensive emoji support for all commit scenarios
+- 🔧 **Flexible Configuration** - Global, project-level, or environment variable configuration
+- 📦 **Standard-Version Compatible** - Works seamlessly with automated versioning tools
+- 💪 **TypeScript Support** - Complete type definitions included
+- ✅ **Well Tested** - 108 tests with 81.5% coverage
+- 🎯 **Commitizen Friendly** - Fully compatible with commitizen ecosystem
+
+## 🚀 Quick Start
+
+Get started in 60 seconds:
+
+```bash
+# 1. Install
+npm install --save-dev cz-conventional-emoji
+
+# 2. Configure (add to package.json)
+npm pkg set config.commitizen.path="./node_modules/cz-conventional-emoji"
+
+# 3. Use it!
+git cz
+```
+
+That's it! Now you can create beautiful commits with emojis. 🎉
+
 ## About This Project
 
 This project is based on [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) with the following enhancements:
@@ -50,12 +76,14 @@ type(scope): emoji subject
 ```
 
 **Format Explanation:**
+
 - `type`: Commit type (feat, fix, docs, etc.)
 - `scope`: Optional scope
 - `emoji`: Corresponding gitmoji emoji
 - `subject`: Short description
 
 This format ensures:
+
 1. **Standard Compatibility**: Type at the beginning of the message, conforming to conventional commit specifications
 2. **Tool Support**: Can be correctly recognized by tools like standard-version, commitlint, etc.
 3. **Visual Appeal**: Still retains the visual cue function of emoji
@@ -64,50 +92,133 @@ This format ensures:
 
 We assume you have already installed [Commitizen](https://github.com/commitizen/cz-cli).
 
-### Global
+### Global Installation
 
 ```bash
+# Using npm
+npm install --global cz-conventional-emoji
+
+# Using yarn
 yarn global add cz-conventional-emoji
-# OR
-# npm install --global cz-conventional-emoji
-# OR
-# pnpm add --global cz-conventional-emoji
+
+# Using pnpm
+pnpm add --global cz-conventional-emoji
 
 # Set global default adapter
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 ```
 
-### Local
+### Local Installation (Recommended)
 
 ```bash
-yarn add cz-conventional-emoji
-# OR
-# npm install --save-dev cz-conventional-emoji
-# OR
-# pnpm add cz-conventional-emoji
+# Install as dev dependency
+npm install --save-dev cz-conventional-emoji
+```
 
-# Set default adapter for your project
-"config": {
+Then add to your `package.json`:
+
+```json
+{
+  "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-emoji"
-    },
+    }
   }
+}
+```
+
+Or use the quick command:
+
+```bash
+npm pkg set config.commitizen.path="./node_modules/cz-conventional-emoji"
 ```
 
 ## Usage
 
-When you need to commit, simply use "git cz" instead of "git commit". See the [Commitizen](https://github.com/commitizen/cz-cli) official documentation for more information.
+When you need to commit, simply use `git cz` instead of `git commit`:
+
+```bash
+git add .
+git cz
+```
+
+See the [Commitizen](https://github.com/commitizen/cz-cli) official documentation for more information.
+
+## ⚙️ Configuration
+
+### Using package.json (Recommended)
+
+Add configuration to your `package.json`:
+
+```json
+{
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-emoji",
+      "useGitmoji": true,
+      "maxHeaderWidth": 100,
+      "maxLineWidth": 100
+    }
+  }
+}
+```
+
+### Using .czrc file
+
+Create a `.czrc` file in your project root or home directory:
+
+```json
+{
+  "path": "cz-conventional-emoji",
+  "useGitmoji": true,
+  "maxHeaderWidth": 100,
+  "maxLineWidth": 100
+}
+```
+
+### Using Environment Variables
+
+You can also configure via environment variables:
+
+```bash
+# Disable gitmoji mode
+CZ_USE_GITMOJI=false git cz
+
+# Set custom max widths
+CZ_MAX_HEADER_WIDTH=80 git cz
+CZ_MAX_LINE_WIDTH=120 git cz
+
+# Set defaults
+CZ_TYPE=feat CZ_SCOPE=api git cz
+```
+
+### Configuration Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `useGitmoji` | boolean | `true` | Enable/disable gitmoji mode |
+| `maxHeaderWidth` | number | `100` | Maximum header length |
+| `maxLineWidth` | number | `100` | Maximum line width for body/footer |
+| `defaultType` | string | - | Default commit type |
+| `defaultScope` | string | - | Default scope |
+| `defaultSubject` | string | - | Default subject |
+| `defaultBody` | string | - | Default body |
+| `defaultIssues` | string | - | Default issues |
+| `disableScopeLowerCase` | boolean | `false` | Disable scope lowercase |
+| `disableSubjectLowerCase` | boolean | `false` | Disable subject lowercase |
 
 ### Disable Gitmoji Mode
 
-If you don't want to use emoji, you can disable it in the following ways:
+If you prefer traditional commits without emoji:
 
-**Global Configuration**
+**Global Configuration:**
+
 ```bash
 echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 ```
 
-**Project Configuration**
+**Project Configuration:**
+
 ```json
 {
   "config": {
@@ -119,12 +230,15 @@ echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 }
 ```
 
-**Environment Variable**
+**Environment Variable:**
+
 ```bash
 CZ_USE_GITMOJI=false git cz
 ```
 
 ## Common Gitmoji Types
+
+[View all 70+ gitmoji types](https://gitmoji.dev/)
 
 | Emoji | Type Name | Description |
 |-------|-----------|-------------|
@@ -182,39 +296,38 @@ feat(api): 💥 redesign authentication system
 BREAKING CHANGE: The authentication API has been completely redesigned.
 ```
 
-## Quick Start
+## Standard-Version Configuration
 
-1. **Install**:
+> **Note**: The `.versionrc.js` configuration file is specifically for `standard-version`. If you're using `semantic-release`, you'll need a different configuration format (`.releaserc` or `release.config.js`).
+
+### Quick Setup
+
+1. **Install standard-version**:
+
    ```bash
-   npm install --save-dev cz-conventional-emoji
+   npm install --save-dev standard-version
    ```
 
-2. **Configure** (add to `package.json`):
+2. **Add scripts to package.json**:
+
    ```json
    {
-     "config": {
-       "commitizen": {
-         "path": "./node_modules/cz-conventional-emoji"
-       }
+     "scripts": {
+       "release": "standard-version"
      }
    }
    ```
 
-3. **Use**:
-   ```bash
-   git cz
-   ```
+3. **Generate changelog and bump version**:
 
-4. **Optional - Setup standard-version**:
    ```bash
-   npm install --save-dev standard-version
-   # Copy .versionrc.js from this project
    npm run release
    ```
 
-## Standard-Version Configuration
+### Detailed Configuration
 
-> **Note**: The `.versionrc.js` configuration file is specifically for `standard-version`. If you're using `semantic-release`, you'll need a different configuration format (`.releaserc` or `release.config.js`).
+<details>
+<summary>Click to expand full .versionrc.js configuration</summary>
 
 To enable all gitmoji types in changelog generation and version bumping, create a `.versionrc.js` file in your project root:
 
@@ -311,11 +424,13 @@ module.exports = {
 ### Usage
 
 1. **Install standard-version**:
+
    ```bash
    npm install --save-dev standard-version
    ```
 
 2. **Add scripts to package.json**:
+
    ```json
    {
      "scripts": {
@@ -325,15 +440,19 @@ module.exports = {
    ```
 
 3. **Generate changelog and bump version**:
+
    ```bash
    npm run release
    ```
 
 This configuration will:
+
 - Include all gitmoji types in version bumping with proper `bump` attributes
 - Generate comprehensive changelogs with proper categorization
 - Hide non-essential types from changelog while still processing them
 - Automatically bump version numbers based on commit types
+
+</details>
 
 ### Alternative: Semantic-Release Configuration
 
@@ -365,6 +484,7 @@ If you prefer `semantic-release` over `standard-version`, create a `.releaserc` 
 ```
 
 **Key Differences:**
+
 - `standard-version`: Uses `.versionrc.js` with `bump` attributes
 - `semantic-release`: Uses `.releaserc` with `releaseRules` and plugin system
 - Both tools analyze conventional commits but use different configuration formats
@@ -378,6 +498,66 @@ For other popular semantic versioning tools in the Node.js ecosystem, please ref
 - **lerna**: Uses `lerna.json` for configuration
 
 Each tool has its own way of handling conventional commits and version bumping. The `.versionrc.js` format shown above is specific to `standard-version` only.
+
+## ❓ FAQ
+
+### Can I use this without commitizen?
+
+No, this is a commitizen adapter that requires commitizen to be installed. Install it with `npm install -g commitizen`.
+
+### Does this work with Husky?
+
+Yes! You can integrate it with Husky pre-commit hooks. Add to your `.husky/prepare-commit-msg`:
+
+```bash
+exec < /dev/tty && node_modules/.bin/cz --hook || true
+```
+
+### How do I disable emoji in some commits?
+
+Use the environment variable: `CZ_USE_GITMOJI=false git cz`
+
+### Can I customize the gitmoji types?
+
+Currently, the gitmoji types are predefined based on the [gitmojis](https://gitmoji.dev/) specification. For custom types, you can configure conventional types in your `.czrc` file.
+
+### Why isn't my environment variable working?
+
+Make sure to use the correct value format:
+
+- ✅ `CZ_USE_GITMOJI=true` or `CZ_USE_GITMOJI=false`
+- ❌ Not just `CZ_USE_GITMOJI` (this won't work)
+
+### How do I integrate with commitlint?
+
+This adapter automatically reads commitlint configuration. Just install `@commitlint/load` and configure your `.commitlintrc.js`.
+
+### Does this support monorepos?
+
+Yes! You can set different scopes for different packages in your monorepo. The scope field is fully customizable.
+
+## 🤝 Contributing
+
+Contributions are welcome! We'd love your help to make this project even better.
+
+### Ways to Contribute
+
+- 🐛 **Found a bug?** [Open an issue](https://github.com/gaoac/cz-conventional-emoji/issues/new)
+- 💡 **Have a feature idea?** [Start a discussion](https://github.com/gaoac/cz-conventional-emoji/discussions)
+- 📖 **Improve documentation** - Fix typos, add examples, clarify instructions
+- 🔀 **Submit a Pull Request** - Bug fixes, features, or improvements
+
+### Getting Started
+
+1. Fork the repository
+2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/cz-conventional-emoji.git`
+3. Install dependencies: `pnpm install`
+4. Make your changes
+5. Run tests: `pnpm test`
+6. Run linter: `pnpm lint`
+7. Submit a PR
+
+For detailed guidelines, please read our [Contributing Guide](./CONTRIBUTING.md) ([中文版](./CONTRIBUTING.zh-CN.md)).
 
 ## Author
 

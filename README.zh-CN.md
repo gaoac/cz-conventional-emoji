@@ -29,6 +29,32 @@
 (Move up and down to reveal more choices)
 ```
 
+## ✨ 特性
+
+- 🎨 **70+ Gitmoji 类型** - 全面的 emoji 支持，覆盖所有提交场景
+- 🔧 **灵活配置** - 支持全局、项目级或环境变量配置
+- 📦 **Standard-Version 兼容** - 与自动化版本管理工具无缝协作
+- 💪 **TypeScript 支持** - 包含完整的类型定义
+- ✅ **充分测试** - 108 个测试用例，81.5% 覆盖率
+- 🎯 **Commitizen 友好** - 完全兼容 commitizen 生态系统
+
+## 🚀 快速开始
+
+60 秒快速上手：
+
+```bash
+# 1. 安装
+npm install --save-dev cz-conventional-emoji
+
+# 2. 配置（添加到 package.json）
+npm pkg set config.commitizen.path="./node_modules/cz-conventional-emoji"
+
+# 3. 开始使用！
+git cz
+```
+
+就是这样！现在你可以用 emoji 创建漂亮的提交了。🎉
+
 ## 关于此项目
 
 本项目基于 [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog) 开发，具有以下增强功能：
@@ -50,12 +76,14 @@ type(scope): emoji subject
 ```
 
 **格式说明：**
+
 - `type`: 提交类型（feat、fix、docs等）
 - `scope`: 可选的作用域
 - `emoji`: 对应的 gitmoji 表情符号
 - `subject`: 简短的描述
 
 这种格式确保了：
+
 1. **标准兼容性**：type 在消息开头，符合 conventional commit 规范
 2. **工具支持**：能被 standard-version、commitlint 等工具正确识别
 3. **视觉美观**：仍然保留了 emoji 的视觉提示作用
@@ -64,50 +92,133 @@ type(scope): emoji subject
 
 我们默认你已经安装过 [Commitizen](https://github.com/commitizen/cz-cli)。
 
-### 全局
+### 全局安装
 
 ```bash
+# 使用 npm
+npm install --global cz-conventional-emoji
+
+# 使用 yarn
 yarn global add cz-conventional-emoji
-# OR
-# npm install --global cz-conventional-emoji
-# OR
-# pnpm add --global cz-conventional-emoji
+
+# 使用 pnpm
+pnpm add --global cz-conventional-emoji
 
 # 设置全局默认适配器
 echo '{ "path": "cz-conventional-emoji" }' > ~/.czrc
 ```
 
-### 本地
+### 本地安装（推荐）
 
 ```bash
-yarn add cz-conventional-emoji
-# OR
-# npm install --save-dev cz-conventional-emoji
-# OR
-# pnpm add cz-conventional-emoji
+# 作为开发依赖安装
+npm install --save-dev cz-conventional-emoji
+```
 
-# 为你的项目设置默认适配器
-"config": {
+然后添加到你的 `package.json`：
+
+```json
+{
+  "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-emoji"
-    },
+    }
   }
+}
+```
+
+或使用快捷命令：
+
+```bash
+npm pkg set config.commitizen.path="./node_modules/cz-conventional-emoji"
 ```
 
 ## 使用
 
-当需要提交时，只需使用"git cz"代替"git commit"即可。查看[Commitizen](https://github.com/commitizen/cz-cli)官方文档了解更多信息。
+当需要提交时，只需使用 `git cz` 代替 `git commit`：
+
+```bash
+git add .
+git cz
+```
+
+查看 [Commitizen](https://github.com/commitizen/cz-cli) 官方文档了解更多信息。
+
+## ⚙️ 配置
+
+### 使用 package.json（推荐）
+
+在你的 `package.json` 中添加配置：
+
+```json
+{
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-emoji",
+      "useGitmoji": true,
+      "maxHeaderWidth": 100,
+      "maxLineWidth": 100
+    }
+  }
+}
+```
+
+### 使用 .czrc 文件
+
+在项目根目录或用户主目录创建 `.czrc` 文件：
+
+```json
+{
+  "path": "cz-conventional-emoji",
+  "useGitmoji": true,
+  "maxHeaderWidth": 100,
+  "maxLineWidth": 100
+}
+```
+
+### 使用环境变量
+
+你也可以通过环境变量进行配置：
+
+```bash
+# 禁用 gitmoji 模式
+CZ_USE_GITMOJI=false git cz
+
+# 设置自定义最大宽度
+CZ_MAX_HEADER_WIDTH=80 git cz
+CZ_MAX_LINE_WIDTH=120 git cz
+
+# 设置默认值
+CZ_TYPE=feat CZ_SCOPE=api git cz
+```
+
+### 配置选项
+
+| 选项 | 类型 | 默认值 | 说明 |
+|--------|------|---------|-------------|
+| `useGitmoji` | boolean | `true` | 启用/禁用 gitmoji 模式 |
+| `maxHeaderWidth` | number | `100` | 最大标题长度 |
+| `maxLineWidth` | number | `100` | 正文/页脚的最大行宽 |
+| `defaultType` | string | - | 默认提交类型 |
+| `defaultScope` | string | - | 默认作用域 |
+| `defaultSubject` | string | - | 默认主题 |
+| `defaultBody` | string | - | 默认正文 |
+| `defaultIssues` | string | - | 默认问题引用 |
+| `disableScopeLowerCase` | boolean | `false` | 禁用作用域小写转换 |
+| `disableSubjectLowerCase` | boolean | `false` | 禁用主题小写转换 |
 
 ### 禁用 Gitmoji 模式
 
-如果你不想使用 emoji，可以通过以下方式禁用：
+如果你喜欢不带 emoji 的传统提交：
 
-**全局配置**
+**全局配置：**
+
 ```bash
 echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 ```
 
-**项目配置**
+**项目配置：**
+
 ```json
 {
   "config": {
@@ -119,12 +230,15 @@ echo '{ "path": "cz-conventional-emoji", "useGitmoji": false }' > ~/.czrc
 }
 ```
 
-**环境变量**
+**环境变量：**
+
 ```bash
 CZ_USE_GITMOJI=false git cz
 ```
 
 ## 常用 Gitmoji 类型
+
+[查看完整的 70+ gitmoji 类型](https://gitmoji.dev/)
 
 | 表情符号 | 类型名称 | 描述 |
 |----------|----------|------|
@@ -182,39 +296,38 @@ feat(api): 💥 redesign authentication system
 BREAKING CHANGE: The authentication API has been completely redesigned.
 ```
 
-## 快速开始
+## Standard-Version 配置
 
-1. **安装**：
+> **注意**: `.versionrc.js` 配置文件专门用于 `standard-version`。如果您使用 `semantic-release`，则需要不同的配置格式（`.releaserc` 或 `release.config.js`）。
+
+### 快速设置
+
+1. **安装 standard-version**：
+
    ```bash
-   npm install --save-dev cz-conventional-emoji
+   npm install --save-dev standard-version
    ```
 
-2. **配置**（添加到 `package.json`）：
+2. **添加脚本到 package.json**：
+
    ```json
    {
-     "config": {
-       "commitizen": {
-         "path": "./node_modules/cz-conventional-emoji"
-       }
+     "scripts": {
+       "release": "standard-version"
      }
    }
    ```
 
-3. **使用**：
-   ```bash
-   git cz
-   ```
+3. **生成变更日志并更新版本**：
 
-4. **可选 - 设置 standard-version**：
    ```bash
-   npm install --save-dev standard-version
-   # 从本项目复制 .versionrc.js
    npm run release
    ```
 
-## Standard-Version 配置
+### 详细配置
 
-> **注意**: `.versionrc.js` 配置文件专门用于 `standard-version`。如果您使用 `semantic-release`，则需要不同的配置格式（`.releaserc` 或 `release.config.js`）。
+<details>
+<summary>点击展开完整的 .versionrc.js 配置</summary>
 
 要在变更日志生成和版本更新中启用所有 gitmoji 类型，请在项目根目录创建 `.versionrc.js` 文件：
 
@@ -311,11 +424,13 @@ module.exports = {
 ### 使用方法
 
 1. **安装 standard-version**：
+
    ```bash
    npm install --save-dev standard-version
    ```
 
 2. **在 package.json 中添加脚本**：
+
    ```json
    {
      "scripts": {
@@ -325,15 +440,19 @@ module.exports = {
    ```
 
 3. **生成变更日志并更新版本**：
+
    ```bash
    npm run release
    ```
 
 此配置将：
+
 - 在版本更新中包含所有 gitmoji 类型，并设置正确的 `bump` 属性
 - 生成分类清晰的变更日志
 - 隐藏非必要类型但仍会处理它们
 - 根据提交类型自动更新版本号
+
+</details>
 
 ### 替代方案：Semantic-Release 配置
 
@@ -365,6 +484,7 @@ module.exports = {
 ```
 
 **主要区别：**
+
 - `standard-version`: 使用 `.versionrc.js` 和 `bump` 属性
 - `semantic-release`: 使用 `.releaserc` 和 `releaseRules` 以及插件系统
 - 两个工具都分析常规提交，但使用不同的配置格式
@@ -378,6 +498,66 @@ module.exports = {
 - **lerna**: 使用 `lerna.json` 进行配置
 
 每个工具都有自己的方式来处理常规提交和版本更新。上面显示的 `.versionrc.js` 格式仅适用于 `standard-version`。
+
+## ❓ 常见问题
+
+### 我可以不使用 commitizen 吗？
+
+不可以，这是一个需要安装 commitizen 的 commitizen 适配器。使用 `npm install -g commitizen` 安装。
+
+### 这与 Husky 兼容吗？
+
+可以！你可以将它与 Husky 预提交钩子集成。在你的 `.husky/prepare-commit-msg` 中添加：
+
+```bash
+exec < /dev/tty && node_modules/.bin/cz --hook || true
+```
+
+### 如何在某些提交中禁用 emoji？
+
+使用环境变量：`CZ_USE_GITMOJI=false git cz`
+
+### 我可以自定义 gitmoji 类型吗？
+
+目前，gitmoji 类型是基于 [gitmojis](https://gitmoji.dev/) 规范预定义的。对于自定义类型，你可以在 `.czrc` 文件中配置常规类型。
+
+### 为什么我的环境变量不起作用？
+
+确保使用正确的值格式：
+
+- ✅ `CZ_USE_GITMOJI=true` 或 `CZ_USE_GITMOJI=false`
+- ❌ 不要只写 `CZ_USE_GITMOJI`（这不会生效）
+
+### 如何与 commitlint 集成？
+
+此适配器会自动读取 commitlint 配置。只需安装 `@commitlint/load` 并配置你的 `.commitlintrc.js`。
+
+### 这支持 monorepo 吗？
+
+支持！你可以为 monorepo 中的不同包设置不同的作用域。作用域字段完全可自定义。
+
+## 🤝 贡献
+
+欢迎贡献！我们期待你的帮助让这个项目变得更好。
+
+### 贡献方式
+
+- 🐛 **发现了 bug？** [提交 issue](https://github.com/gaoac/cz-conventional-emoji/issues/new)
+- 💡 **有功能想法？** [发起讨论](https://github.com/gaoac/cz-conventional-emoji/discussions)
+- 📖 **改进文档** - 修复错别字、添加示例、完善说明
+- 🔀 **提交 Pull Request** - Bug 修复、功能或改进
+
+### 开始贡献
+
+1. Fork 仓库
+2. 克隆你的 fork：`git clone https://github.com/YOUR_USERNAME/cz-conventional-emoji.git`
+3. 安装依赖：`pnpm install`
+4. 进行更改
+5. 运行测试：`pnpm test`
+6. 运行 linter：`pnpm lint`
+7. 提交 PR
+
+详细指南请阅读我们的[贡献指南](./CONTRIBUTING.zh-CN.md)（[English](./CONTRIBUTING.md)）。
 
 ## 作者
 
