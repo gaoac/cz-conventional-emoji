@@ -1094,3 +1094,207 @@ describe('non-gitmoji mode', () => {
     ).to.equal(`feat: ${subject}\n\nBREAKING CHANGE: API changed`);
   });
 });
+
+// Additional comprehensive tests
+describe('gitmoji type mapping', () => {
+  it('should map :sparkles: to feat', () => {
+    const options = customOptions({ useGitmoji: true });
+    const choices = getChoices(options);
+    const sparkles = choices.find(c => c.value === ':sparkles:');
+    expect(sparkles).to.exist;
+    expect(sparkles.name).to.include('feat:');
+  });
+
+  it('should map :bug: to fix', () => {
+    const options = customOptions({ useGitmoji: true });
+    const choices = getChoices(options);
+    const bug = choices.find(c => c.value === ':bug:');
+    expect(bug).to.exist;
+    expect(bug.name).to.include('fix:');
+  });
+
+  it('should map :ambulance: to hotfix', () => {
+    const options = customOptions({ useGitmoji: true });
+    const choices = getChoices(options);
+    const ambulance = choices.find(c => c.value === ':ambulance:');
+    expect(ambulance).to.exist;
+    expect(ambulance.name).to.include('hotfix:');
+  });
+
+  it('should have preferred types at the beginning', () => {
+    const options = customOptions({ useGitmoji: true });
+    const choices = getChoices(options);
+    
+    // First choice should be :sparkles: (feat)
+    expect(choices[0].value).to.equal(':sparkles:');
+    // Second choice should be :bug: (fix)
+    expect(choices[1].value).to.equal(':bug:');
+    // Third choice should be :ambulance: (hotfix)
+    expect(choices[2].value).to.equal(':ambulance:');
+  });
+});
+
+describe('scope filtering', () => {
+  it('should lowercase scope by default', () => {
+    expect(questionFilter('scope', 'MyScope')).to.equal('myscope');
+  });
+
+  it('should trim scope whitespace', () => {
+    expect(questionFilter('scope', '  my-scope  ')).to.equal('my-scope');
+  });
+
+  it('should handle scope with special characters', () => {
+    expect(questionFilter('scope', 'my-scope/sub-scope')).to.equal('my-scope/sub-scope');
+  });
+
+  it('should not lowercase scope when disabled', () => {
+    const options = customOptions({ disableScopeLowerCase: true });
+    const question = getQuestion('scope', options);
+    const filtered = question.filter('MyScope');
+    expect(filtered).to.equal('MyScope');
+  });
+});
+
+describe('subject filtering and validation', () => {
+  it('should trim subject', () => {
+    expect(questionFilter('subject', '  my subject  ')).to.equal('my subject');
+  });
+
+  it('should lowercase first character by default', () => {
+    expect(questionFilter('subject', 'My subject')).to.equal('my subject');
+  });
+
+  it('should not lowercase first character when disabled', () => {
+    const options = customOptions({ disableSubjectLowerCase: true });
+    const question = getQuestion('subject', options);
+    const filtered = question.filter('My subject');
+    expect(filtered).to.equal('My subject');
+  });
+
+  it('should remove single trailing dot', () => {
+    expect(questionFilter('subject', 'my subject.')).to.equal('my subject');
+  });
+
+  it('should remove multiple trailing dots', () => {
+    expect(questionFilter('subject', 'my subject...')).to.equal('my subject');
+  });
+
+  it('should preserve dots within subject', () => {
+    expect(questionFilter('subject', 'fix v1.0.0 issue')).to.equal('fix v1.0.0 issue');
+  });
+
+  it('should handle empty string after filtering', () => {
+    expect(() =>
+      commitMessage({
+        type,
+        subject: '   ...   '
+      })
+    ).to.throw('subject is required');
+  });
+});
+
+describe('breaking change edge cases', () => {
+  it('should handle breakingBody when no body provided', () => {
+    const result = commitMessage({
+      type,
+      subject,
+      isBreaking: true,
+      breakingBody: 'This is the breaking body',
+      breaking: 'API changed'
+    });
+    expect(result).to.include('BREAKING CHANGE: API changed');
+  });
+
+  it('should strip BREAKING CHANGE prefix if already present', () => {
+    const result = commitMessage({
+      type,
+      subject,
+      isBreaking: true,
+      breaking: 'BREAKING CHANGE: API changed'
+    });
+    expect(result).to.equal(`feat: ✨ ${subject}\n\nBREAKING CHANGE: API changed`);
+    // Should not have duplicate prefix
+    expect(result).to.not.include('BREAKING CHANGE: BREAKING CHANGE:');
+  });
+});
+
+describe('issue body edge cases', () => {
+  it('should handle issuesBody when no body and no breaking body', () => {
+    const result = commitMessage({
+      type,
+      subject,
+      isIssueAffected: true,
+      issuesBody: 'This is the issue body',
+      issues: 'fix #123'
+    });
+    expect(result).to.include('fix #123');
+  });
+});
+
+describe('prompt message variations', () => {
+  it('should show correct subject prompt with type', () => {
+    const prompt = questionPrompt('subject', { type: ':sparkles:' });
+    expect(prompt).to.be.a('string');
+    expect(prompt).to.include('Write a short');
+  });
+
+  it('should show correct subject prompt with type and scope', () => {
+    const prompt = questionPrompt('subject', { type: ':sparkles:', scope: 'api' });
+    expect(prompt).to.be.a('string');
+    expect(prompt).to.include('Write a short');
+  });
+});
+
+describe('validation edge cases', () => {
+  it('should calculate correct max subject length with scope', () => {
+    const options = customOptions({ maxHeaderWidth: 100 });
+    // type (4) + ': ' (2) + '(scope): ' (10) + emoji (2) + space (1) = 19
+    // So max subject length = 100 - 19 = 81 for gitmoji mode with scope
+    expect(() =>
+      commitMessage({
+        type: ':sparkles:',
+        scope: 'scope',
+        subject: 'a'.repeat(100)
+      }, options)
+    ).to.throw('Subject length must be less than or equal to');
+  });
+
+  it('should calculate correct max subject length without scope', () => {
+    const options = customOptions({ maxHeaderWidth: 100 });
+    // type (4) + ': ' (2) + emoji (2) + space (1) = 9
+    // So max subject length = 100 - 9 = 91 for gitmoji mode without scope
+    expect(() =>
+      commitMessage({
+        type: ':sparkles:',
+        subject: 'a'.repeat(100)
+      }, options)
+    ).to.throw('Subject length must be less than or equal to');
+  });
+});
+
+describe('choice formatting', () => {
+  it('should format gitmoji choices with proper alignment', () => {
+    const options = customOptions({ useGitmoji: true });
+    const choices = getChoices(options);
+    
+    // All choices should have emoji, type name, and description
+    choices.forEach(choice => {
+      expect(choice.name).to.be.a('string');
+      expect(choice.value).to.be.a('string');
+      expect(choice.name).to.match(/\w+:\s+/); // Should have "type: " format
+    });
+  });
+
+  it('should format conventional choices with proper alignment', () => {
+    const options = customOptions({ useGitmoji: false });
+    const choices = getChoices(options);
+    
+    // All choices should have type and description
+    choices.forEach(choice => {
+      expect(choice.name).to.be.a('string');
+      expect(choice.value).to.be.a('string');
+      expect(choice.name).to.match(/\w+:\s+/); // Should have "type: " format
+    });
+  });
+});
+

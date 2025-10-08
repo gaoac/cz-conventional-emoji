@@ -3,12 +3,15 @@
   "version": "1.1.4",
   "description": "Commitizen adapter with gitmoji support following the conventional-changelog format.",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "commit": "git-cz",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui",
+    "lint": "eslint index.js engine.js",
+    "lint:fix": "eslint index.js engine.js --fix",
     "format": "prettier --write *.js",
     "release": "standard-version",
     "release-as": "standard-version --release-as"
@@ -24,22 +27,47 @@
   },
   "author": "gaoancun <gaoac.snow@outlook.com>",
   "license": "MIT",
+  "keywords": [
+    "commitizen",
+    "commitizen-adapter",
+    "cz-adapter",
+    "gitmoji",
+    "emoji",
+    "conventional-commit",
+    "conventional-changelog",
+    "git",
+    "commit",
+    "semantic-release",
+    "standard-version"
+  ],
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "engine.js",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
+  "bugs": {
+    "url": "https://github.com/gaoac/cz-conventional-emoji/issues"
+  },
   "dependencies": {
     "chalk": "^5.6.2",
     "commitizen": "^4.3.1",
     "conventional-commit-types": "^3.0.0",
-    "es-toolkit": "^1.39.10",
     "gitmojis": "^3.15.0",
     "longest": "^2.0.1",
     "word-wrap": "^1.2.5"
   },
   "devDependencies": {
+    "@eslint/js": "^9.37.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "cosmiconfig": "^9.0.0",
+    "eslint": "^9.37.0",
     "mock-require": "3.0.3",
     "prettier": "^3.6.2",
-    "semver": "^7.7.2",
+    "semver": "^7.7.3",
     "standard-version": "^9.5.0",
     "vitest": "^3.2.4"
   },

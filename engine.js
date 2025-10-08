@@ -14,12 +14,111 @@ var longest = require('longest');
 var chalk = require('chalk');
 
 /**
+ * Mapping of gitmoji codes to conventional commit type names
+ * This provides better semantic meaning for gitmoji-based commits
+ * Extracted as a constant to avoid recreating the object on each function call
+ */
+var GITMOJI_TYPE_MAP = {
+  ':sparkles:': 'feat',
+  ':bug:': 'fix',
+  ':memo:': 'docs',
+  ':lipstick:': 'style',
+  ':recycle:': 'refactor',
+  ':white_check_mark:': 'test',
+  ':wrench:': 'chore',
+  ':zap:': 'perf',
+  ':construction_worker:': 'ci',
+  ':building_construction:': 'build',
+  ':rewind:': 'revert',
+  ':construction:': 'wip',
+  ':lock:': 'security',
+  ':rocket:': 'release',
+  ':boom:': 'breaking',
+  ':ambulance:': 'hotfix',
+  ':fire:': 'remove',
+  ':tada:': 'init',
+  ':closed_lock_with_key:': 'secrets',
+  ':bookmark:': 'version',
+  ':rotating_light:': 'warn',
+  ':green_heart:': 'ci-fix',
+  ':arrow_down:': 'downgrade',
+  ':arrow_up:': 'upgrade',
+  ':pushpin:': 'pin',
+  ':chart_with_upwards_trend:': 'analytics',
+  ':heavy_plus_sign:': 'deps-add',
+  ':heavy_minus_sign:': 'deps-remove',
+  ':globe_with_meridians:': 'i18n',
+  ':pencil2:': 'chore',
+  ':poop:': 'bad-code',
+  ':twisted_rightwards_arrows:': 'merge',
+  ':package:': 'package',
+  ':alien:': 'external-api',
+  ':truck:': 'move',
+  ':page_facing_up:': 'license',
+  ':bento:': 'assets',
+  ':wheelchair:': 'accessibility',
+  ':bulb:': 'comments',
+  ':beers:': 'drunk-code',
+  ':speech_balloon:': 'text',
+  ':card_file_box:': 'database',
+  ':loud_sound:': 'logs',
+  ':mute:': 'remove-logs',
+  ':busts_in_silhouette:': 'contributors',
+  ':children_crossing:': 'ux',
+  ':iphone:': 'responsive',
+  ':clown_face:': 'mock',
+  ':egg:': 'easter-egg',
+  ':see_no_evil:': 'gitignore',
+  ':camera_flash:': 'snapshots',
+  ':alembic:': 'experiment',
+  ':mag:': 'seo',
+  ':label:': 'types',
+  ':seedling:': 'seed',
+  ':triangular_flag_on_post:': 'feature-flags',
+  ':goal_net:': 'error-handling',
+  ':dizzy:': 'animation',
+  ':wastebasket:': 'deprecate',
+  ':passport_control:': 'auth',
+  ':adhesive_bandage:': 'quick-fix',
+  ':monocle_face:': 'data-analysis',
+  ':coffin:': 'dead-code',
+  ':test_tube:': 'failing-test',
+  ':necktie:': 'business-logic',
+  ':stethoscope:': 'health-check',
+  ':bricks:': 'infrastructure',
+  ':technologist:': 'dx',
+  ':money_with_wings:': 'sponsors',
+  ':thread:': 'concurrency',
+  ':safety_vest:': 'validation',
+  ':airplane:': 'offline'
+};
+
+/**
+ * Preferred order for gitmoji types based on conventional-commit-types
+ * This ensures the most common types appear first in the selection list
+ */
+var PREFERRED_GITMOJI_ORDER = [
+  ':sparkles:', // feat
+  ':bug:', // fix
+  ':ambulance:', // hotfix
+  ':memo:', // docs
+  ':lipstick:', // style
+  ':recycle:', // refactor
+  ':zap:', // perf
+  ':white_check_mark:', // test
+  ':building_construction:', // build
+  ':construction_worker:', // ci
+  ':pencil2:', // chore
+  ':rewind:' // revert
+];
+
+/**
  * Utility function to filter out falsy values from an array
  * @param {Array} array - Array to filter
  * @returns {Array} Filtered array with only truthy values
  */
-var filter = function(array) {
-  return array.filter(function(x) {
+var filter = function (array) {
+  return array.filter(function (x) {
     return x;
   });
 };
@@ -29,7 +128,7 @@ var filter = function(array) {
  * @param {Object} answers - User answers containing type and scope
  * @returns {number} Header length including separators
  */
-var headerLength = function(answers) {
+var headerLength = function (answers) {
   return (
     answers.type.length + 2 + (answers.scope ? answers.scope.length + 2 : 0)
   );
@@ -41,7 +140,7 @@ var headerLength = function(answers) {
  * @param {Object} answers - User answers
  * @returns {number} Maximum subject length
  */
-var maxSummaryLength = function(options, answers) {
+var maxSummaryLength = function (options, answers) {
   return options.maxHeaderWidth - headerLength(answers);
 };
 
@@ -51,12 +150,11 @@ var maxSummaryLength = function(options, answers) {
  * @param {boolean} disableSubjectLowerCase - Whether to disable lowercase conversion
  * @returns {string} Processed subject
  */
-var filterSubject = function(subject, disableSubjectLowerCase) {
+var filterSubject = function (subject, disableSubjectLowerCase) {
   subject = subject.trim();
   // Convert first character to lowercase unless disabled
-  if (!disableSubjectLowerCase && subject.charAt(0).toLowerCase() !== subject.charAt(0)) {
-    subject =
-      subject.charAt(0).toLowerCase() + subject.slice(1, subject.length);
+  if (!disableSubjectLowerCase && subject.length > 0) {
+    subject = subject.charAt(0).toLowerCase() + subject.slice(1);
   }
   // Remove trailing dots
   while (subject.endsWith('.')) {
@@ -70,7 +168,7 @@ var filterSubject = function(subject, disableSubjectLowerCase) {
  * @param {Object} options - Configuration options
  * @returns {Object} Commitizen prompter object
  */
-module.exports = function(options) {
+module.exports = function (options) {
   var types = options.types;
   var useGitmoji = options.useGitmoji;
   var gitmojis = options.gitmojis;
@@ -80,109 +178,11 @@ module.exports = function(options) {
     // Initialize types object for gitmoji-based types
     types = {};
     
-    /**
-     * Mapping of gitmoji codes to conventional commit type names
-     * This provides better semantic meaning for gitmoji-based commits
-     */
-    var typeNameMap = {
-      ':sparkles:': 'feat',
-      ':bug:': 'fix',
-      ':memo:': 'docs',
-      ':lipstick:': 'style',
-      ':recycle:': 'refactor',
-      ':white_check_mark:': 'test',
-      ':wrench:': 'chore',
-      ':zap:': 'perf',
-      ':construction_worker:': 'ci',
-      ':building_construction:': 'build',
-      ':rewind:': 'revert',
-      ':construction:': 'wip',
-      ':lock:': 'security',
-      ':rocket:': 'release',
-      ':boom:': 'breaking',
-      ':ambulance:': 'hotfix',
-      ':fire:': 'remove',
-      ':tada:': 'init',
-      ':closed_lock_with_key:': 'secrets',
-      ':bookmark:': 'version',
-      ':rotating_light:': 'warn',
-      ':green_heart:': 'ci-fix',
-      ':arrow_down:': 'downgrade',
-      ':arrow_up:': 'upgrade',
-      ':pushpin:': 'pin',
-      ':chart_with_upwards_trend:': 'analytics',
-      ':heavy_plus_sign:': 'deps-add',
-      ':heavy_minus_sign:': 'deps-remove',
-      ':globe_with_meridians:': 'i18n',
-      ':pencil2:': 'chore',
-      ':poop:': 'bad-code',
-      ':twisted_rightwards_arrows:': 'merge',
-      ':package:': 'package',
-      ':alien:': 'external-api',
-      ':truck:': 'move',
-      ':page_facing_up:': 'license',
-      ':bento:': 'assets',
-      ':wheelchair:': 'accessibility',
-      ':bulb:': 'comments',
-      ':beers:': 'drunk-code',
-      ':speech_balloon:': 'text',
-      ':card_file_box:': 'database',
-      ':loud_sound:': 'logs',
-      ':mute:': 'remove-logs',
-      ':busts_in_silhouette:': 'contributors',
-      ':children_crossing:': 'ux',
-      ':iphone:': 'responsive',
-      ':clown_face:': 'mock',
-      ':egg:': 'easter-egg',
-      ':see_no_evil:': 'gitignore',
-      ':camera_flash:': 'snapshots',
-      ':alembic:': 'experiment',
-      ':mag:': 'seo',
-      ':label:': 'types',
-      ':seedling:': 'seed',
-      ':triangular_flag_on_post:': 'feature-flags',
-      ':goal_net:': 'error-handling',
-      ':dizzy:': 'animation',
-      ':wastebasket:': 'deprecate',
-      ':passport_control:': 'auth',
-      ':adhesive_bandage:': 'quick-fix',
-      ':monocle_face:': 'data-analysis',
-      ':coffin:': 'dead-code',
-      ':test_tube:': 'failing-test',
-      ':necktie:': 'business-logic',
-      ':stethoscope:': 'health-check',
-      ':bricks:': 'infrastructure',
-      ':technologist:': 'dx',
-      ':money_with_wings:': 'sponsors',
-      ':thread:': 'concurrency',
-      ':safety_vest:': 'validation',
-      ':airplane:': 'offline'
-    };
-    
-    /**
-     * Preferred order for gitmoji types based on conventional-commit-types
-     * This ensures the most common types appear first in the selection list
-     */
-    var preferredOrder = [
-      ':sparkles:', // feat
-      ':bug:', // fix
-      ':ambulance:', // hotfix
-      ':memo:', // docs
-      ':lipstick:', // style
-      ':recycle:', // refactor
-      ':zap:', // perf
-      ':white_check_mark:', // test
-      ':building_construction:', // build
-      ':construction_worker:', // ci
-      ':pencil2:', // chore
-      ':rewind:' // revert
-    ];
-    
     // Add preferred types first to ensure they appear at the top
-    preferredOrder.forEach(function(code) {
-      var gitmoji = gitmojis.find(function(g) { return g.code === code; });
+    PREFERRED_GITMOJI_ORDER.forEach(function (code) {
+      var gitmoji = gitmojis.find(function (g) { return g.code === code; });
       if (gitmoji) {
-        var typeName = typeNameMap[gitmoji.code] || gitmoji.name;
+        var typeName = GITMOJI_TYPE_MAP[gitmoji.code] || gitmoji.name;
         types[gitmoji.code] = {
           description: gitmoji.description,
           title: gitmoji.name,
@@ -193,9 +193,9 @@ module.exports = function(options) {
     });
     
     // Add remaining gitmojis that weren't in the preferred order
-    gitmojis.forEach(function(gitmoji) {
+    gitmojis.forEach(function (gitmoji) {
       if (!types[gitmoji.code]) {
-        var typeName = typeNameMap[gitmoji.code] || gitmoji.name;
+        var typeName = GITMOJI_TYPE_MAP[gitmoji.code] || gitmoji.name;
         types[gitmoji.code] = {
           description: gitmoji.description,
           title: gitmoji.name,
@@ -210,28 +210,31 @@ module.exports = function(options) {
    * Generate formatted choices for the type selection prompt
    * Handles both gitmoji and conventional commit formats with proper alignment
    */
-  var choices = Object.entries(types).map(function([key, type]) {
-    if (useGitmoji) {
+  var choices;
+  if (useGitmoji) {
+    // Calculate max type name length once for performance
+    var typeNames = Object.values(types).map(function (t) { return t.typeName; });
+    var maxTypeNameLength = longest(typeNames).length;
+    
+    choices = Object.entries(types).map(function ([key, type]) {
       // Format: emoji typeName: description (with proper alignment)
       var typeName = type.typeName;
-      // Calculate padding for proper description alignment
-      var typeNames = Object.values(types).map(function(t) { return t.typeName; });
-      var maxTypeNameLength = longest(typeNames).length;
-      var currentTypeNameLength = typeName.length;
-      var padding = maxTypeNameLength - currentTypeNameLength;
+      var padding = maxTypeNameLength - typeName.length;
       return {
         name: type.emoji + '  ' + typeName + ':' + ' '.repeat(padding) + ' ' + type.description,
         value: key
       };
-    } else {
-      // Format: type: description (with proper alignment)
-      var length = longest(Object.keys(types)).length + 1;
+    });
+  } else {
+    // Format: type: description (with proper alignment)
+    var length = longest(Object.keys(types)).length + 1;
+    choices = Object.entries(types).map(function ([key, type]) {
       return {
         name: (key + ':').padEnd(length) + ' ' + type.description,
         value: key
       };
-    }
-  });
+    });
+  }
 
   return {
     /**
@@ -243,7 +246,7 @@ module.exports = function(options) {
      * @param {Object} cz - Commitizen instance (inquirer.js)
      * @param {Function} commit - Callback to execute with the final commit message
      */
-    prompter: function(cz, commit) {
+    prompter: function (cz, commit) {
       // Interactive prompt flow to collect commit information
       cz.prompt([
         // Type selection prompt
@@ -261,7 +264,7 @@ module.exports = function(options) {
           message:
             'What is the scope of this change (e.g. component or file name): (press enter to skip)',
           default: options.defaultScope,
-          filter: function(value) {
+          filter: function (value) {
             return options.disableScopeLowerCase
               ? value.trim()
               : value.trim().toLowerCase();
@@ -271,7 +274,7 @@ module.exports = function(options) {
         {
           type: 'input',
           name: 'subject',
-          message: function(answers) {
+          message: function (answers) {
             return (
               'Write a short, imperative tense description of the change (max ' +
               maxSummaryLength(options, answers) +
@@ -279,19 +282,19 @@ module.exports = function(options) {
             );
           },
           default: options.defaultSubject,
-          validate: function(subject, answers) {
+          validate: function (subject, answers) {
             var filteredSubject = filterSubject(subject, options.disableSubjectLowerCase);
             return filteredSubject.length == 0
               ? 'subject is required'
               : filteredSubject.length <= maxSummaryLength(options, answers)
-              ? true
-              : 'Subject length must be less than or equal to ' +
+                ? true
+                : 'Subject length must be less than or equal to ' +
                 maxSummaryLength(options, answers) +
                 ' characters. Current length is ' +
                 filteredSubject.length +
                 ' characters.';
           },
-          transformer: function(subject, answers) {
+          transformer: function (subject, answers) {
             var filteredSubject = filterSubject(subject, options.disableSubjectLowerCase);
             var color =
               filteredSubject.length <= maxSummaryLength(options, answers)
@@ -299,7 +302,7 @@ module.exports = function(options) {
                 : chalk.default.red;
             return color('(' + filteredSubject.length + ') ' + subject);
           },
-          filter: function(subject) {
+          filter: function (subject) {
             return filterSubject(subject, options.disableSubjectLowerCase);
           }
         },
@@ -325,10 +328,10 @@ module.exports = function(options) {
           default: '-',
           message:
             'A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself:\n',
-          when: function(answers) {
-            return answers.isBreaking && !answers.body;
+          when: function (_answers) {
+            return _answers.isBreaking && !_answers.body;
           },
-          validate: function(breakingBody, answers) {
+          validate: function (breakingBody) {
             return (
               breakingBody.trim().length > 0 ||
               'Body is required for BREAKING CHANGE'
@@ -340,7 +343,7 @@ module.exports = function(options) {
           type: 'input',
           name: 'breaking',
           message: 'Describe the breaking changes:\n',
-          when: function(answers) {
+          when: function (answers) {
             return answers.isBreaking;
           }
         },
@@ -358,7 +361,7 @@ module.exports = function(options) {
           default: '-',
           message:
             'If issues are closed, the commit requires a body. Please enter a longer description of the commit itself:\n',
-          when: function(answers) {
+          when: function (answers) {
             return (
               answers.isIssueAffected && !answers.body && !answers.breakingBody
             );
@@ -369,12 +372,12 @@ module.exports = function(options) {
           type: 'input',
           name: 'issues',
           message: 'Add issue references (e.g. "fix #123", "re #123".):\n',
-          when: function(answers) {
+          when: function (answers) {
             return answers.isIssueAffected;
           },
           default: options.defaultIssues ? options.defaultIssues : undefined
         }
-      ]).then(function(answers) {
+      ]).then(function (answers) {
         // Text wrapping configuration for consistent formatting
         var wrapOptions = {
           trim: true,

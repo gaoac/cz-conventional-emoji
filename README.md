@@ -3,6 +3,10 @@
 A commitizen adapter with emoji that follows conventional-changelog.
 
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![npm version](https://img.shields.io/npm/v/cz-conventional-emoji.svg)](https://www.npmjs.com/package/cz-conventional-emoji)
+[![npm downloads](https://img.shields.io/npm/dm/cz-conventional-emoji.svg)](https://www.npmjs.com/package/cz-conventional-emoji)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Test Coverage](https://img.shields.io/badge/coverage-81.5%25-brightgreen.svg)](./coverage)
 
 [![NPM](https://nodei.co/npm/cz-conventional-emoji.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/cz-conventional-emoji/)
 

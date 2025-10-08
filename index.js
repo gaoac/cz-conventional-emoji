@@ -52,7 +52,12 @@ var options = {
     100,
   
   // Gitmoji support configuration
-  useGitmoji: process.env.CZ_USE_GITMOJI || config.useGitmoji || true,
+  useGitmoji:
+    process.env.CZ_USE_GITMOJI !== undefined
+      ? process.env.CZ_USE_GITMOJI === 'true'
+      : config.useGitmoji !== undefined
+        ? config.useGitmoji
+        : true,
   gitmojis: gitmojis
 };
 
@@ -66,10 +71,10 @@ var options = {
  * Note: This is asynchronous and runs after the module is exported, so the initial
  * export uses default values. The commitlint configuration is applied asynchronously.
  */
-(function(options) {
+(function (options) {
   try {
     var commitlintLoad = require('@commitlint/load');
-    commitlintLoad().then(function(clConfig) {
+    commitlintLoad().then(function (clConfig) {
       if (clConfig.rules) {
         var maxHeaderLengthRule = clConfig.rules['header-max-length'];
         // Only override if:
@@ -85,13 +90,19 @@ var options = {
           options.maxHeaderWidth = maxHeaderLengthRule[2];
         }
       }
-    }).catch(function(err) {
+    }).catch(function (err) {
       // Silently ignore errors and continue with default values
       // This ensures the adapter works even if commitlint is not configured
+      if (process.env.DEBUG) {
+        console.error('Failed to load commitlint config:', err);
+      }
     });
-  } catch (err) {
+  } catch (e) {
     // Silently ignore errors and continue with default values
     // This handles cases where @commitlint/load is not available
+    if (process.env.DEBUG) {
+      console.error('Failed to require @commitlint/load:', e);
+    }
   }
 })(options);
 
